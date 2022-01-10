@@ -113,7 +113,8 @@ for devicename in clients:
 
     publishDiscovery(device)
     attr_payload = json.dumps(device)
-    state = datetime.datetime.strptime(device['LastSeen'],"%b %d %Y - %H:%M:%S").replace(tzinfo=datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo).isoformat() # get datetime object with timezone indication
+    date= device['LastSeen'].replace(" ","")
+    state = datetime.datetime.strptime(date,"%b%d%Y-%H:%M:%S").replace(tzinfo=datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo).isoformat() # get datetime object with timezone indication
     statetopic = "%s%s/state"%(topicPrefix,device['Name'])
     attrtopic = "%s%s/attr"%(topicPrefix,device['Name'])
     logging.debug("Publishing state and attributes for %s"%(device['Name']))
