@@ -72,9 +72,9 @@ def on_mqtt_message(mqttclient,obj,msg):
     top = msg.topic.split(discoveryTopicPrefix)
     if len(top)>1:
         name = top[1].split("/config")[0]
-        if not name in clients: #delete config if client does not exist anymore:
+        if not name in clients and msg.payload!=b'{}': #delete config if client does not exist anymore:
             logging.warning("%s does not exist anymore. Deleting from home assistant.."%name)
-            mqttclient.publish(msg.topic,"{}")
+            mqttclient.publish(msg.topic,"{}",retain=True)
 
 def publishDiscovery(device): #publish config payload for MQTT Discovery in HA
     discoveryTopic=discoveryTopicPrefix +"%s/config" % device['Name']
